@@ -1,105 +1,108 @@
+<div align="center">
+
 # 🌱 CropCycle
 
-### Multi-temporal NDVI analysis for understanding crop growth cycles
+### From satellite vegetation data to crop-cycle insights.
 
-[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![Leaflet](https://img.shields.io/badge/Maps-Leaflet-199900?logo=leaflet&logoColor=white)](https://leafletjs.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+**A full-stack system for analysing multi-temporal NDVI data, detecting crop growth stages, and turning raw vegetation signals into readable agricultural insights.**
 
-> **CropCycle** is a full-stack agricultural analysis system that transforms multi-temporal NDVI time-series data into crop growth stages, health indicators, vegetation coverage, and season-level insights.
+<br/>
 
-The project is designed around a simple idea: **instead of looking at NDVI values as isolated measurements, use the time series to understand how a crop is developing over an entire season.**
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=111827)
+![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?style=for-the-badge&logo=express&logoColor=white)
+
+<br/>
+
+[📖 Documentation](#-how-it-works) · [🚀 Setup](#-run-locally) · [🔌 API](#-api) · [🛠️ Tech Stack](#️-tech-stack)
+
+</div>
 
 ---
 
-## ✨ What the project does
+## 🌾 What is CropCycle?
 
-CropCycle takes dated NDVI observations and turns them into an interpretable crop-cycle model.
+CropCycle takes a time series of **NDVI (Normalized Difference Vegetation Index)** observations and uses it to estimate the major stages of a crop's seasonal cycle.
+
+Instead of looking at a table of vegetation values, the application turns the data into a simple story:
 
 ```text
-NDVI Time Series
-       ↓
-   Data Upload
-       ↓
-Signal Smoothing
-       ↓
-Stage Detection
-       ↓
-┌─────────────────────────────┐
-│ Growth Start                │
-│ Peak Growth                 │
-│ Harvest / Decline           │
-└─────────────────────────────┘
-       ↓
-Crop Health + Season Metrics
-       ↓
-Visual Analysis Dashboard
+Raw NDVI data
+      ↓
+Noise reduction
+      ↓
+Growth detection
+      ↓
+Peak detection
+      ↓
+Decline / harvest detection
+      ↓
+Crop health + season metrics
+      ↓
+Visual agricultural dashboard
 ```
 
-### Core capabilities
-
-- 📈 Analyze multi-temporal NDVI observations
-- 🌱 Detect the beginning of crop growth
-- ☀️ Identify peak vegetation / peak growth
-- 🌾 Estimate the harvest or sustained-decline stage
-- 🧮 Calculate a crop health score from 0–100
-- 🌿 Classify vegetation coverage as **Poor, Fair, Good, or Excellent**
-- 🗓️ Estimate growing-season duration
-- 📊 Calculate average, minimum, maximum, and variance of NDVI
-- 🧩 Split the season into five interpretable phases
-- 📂 Upload CSV datasets or load demo data
-- 🔐 Support user authentication with JWT
-- 🗺️ Provide map-related support through Leaflet
+The project combines a **data-analysis engine, REST API, database, authentication, CSV ingestion, and frontend visualisation** into one application.
 
 ---
 
-## 🧠 How the analysis works
+## ✨ Highlights
 
-The analysis engine lives in [`backend/services/analysisService.js`](backend/services/analysisService.js).
-
-### 1. Smooth the signal
-
-A **3-point moving average** is applied to the NDVI series to reduce short-term noise before stage detection.
-
-### 2. Detect growth start
-
-The engine looks for the first point that rises above a threshold set at **25% of the NDVI range above the minimum**, while also showing a consistent upward trend.
-
-### 3. Find peak growth
-
-Peak growth is identified as the point with the **maximum NDVI value in the smoothed series**.
-
-### 4. Estimate harvest / decline
-
-After the peak, the engine searches for a sustained decline that falls below a threshold set at **35% of the observed NDVI range above the minimum**.
-
-### 5. Calculate crop health
-
-The health score combines:
-
-| Component | Maximum contribution |
-|---|---:|
-| Peak NDVI | 40 points |
-| Average NDVI | 30 points |
-| Season length | 20 points |
-| Detection confidence | 10 points |
-
-### 6. Segment the crop cycle
-
-The resulting time series is divided into five phases:
-
-**Dormant → Growing → Peak → Declining → Harvest**
-
-> These rules are intentionally deterministic and explainable, making the system useful for experimentation, prototyping, and academic evaluation.
+| 🌱 | Capability | What it does |
+|---|---|---|
+| 📈 | **NDVI Analysis** | Processes multi-temporal vegetation observations |
+| 🧭 | **Stage Detection** | Identifies growth start, peak growth and harvest |
+| 📊 | **Crop Metrics** | Calculates health, season length, average/max/min NDVI and variance |
+| 🗺️ | **Location Support** | Supports agricultural datasets with geographic context |
+| 📁 | **CSV Upload** | Import your own NDVI time-series data |
+| 🔐 | **Authentication** | JWT-based user authentication and protected data |
+| 🧪 | **Demo Data** | Test the system with sample crop datasets |
+| ⚡ | **Full Stack** | React/Vite frontend + Node/Express backend + MongoDB |
 
 ---
 
-## 📊 Example input
+## 🔬 How It Works
 
-CropCycle accepts a simple two-column CSV format:
+### 01 · Smooth the signal
+
+A **3-point moving average** is applied to reduce short-term noise in the NDVI signal.
+
+### 02 · Find growth start
+
+The engine looks for the first sustained upward movement above a baseline threshold.
+
+### 03 · Find peak growth
+
+The highest NDVI value in the smoothed series becomes the estimated **peak growth stage**.
+
+### 04 · Detect decline / harvest
+
+After the peak, the engine searches for a sustained decline below the calculated harvest threshold.
+
+### 05 · Calculate crop health
+
+A 0–100 health score combines:
+
+- Peak NDVI
+- Average NDVI
+- Growing-season duration
+- Detection confidence
+
+### 06 · Segment the crop cycle
+
+The final time series is divided into five readable phases:
+
+```text
+Dormant ─────── Growing ─────── Peak ─────── Declining ─────── Harvest
+   🌑              🌿             🌳              🍂                🌾
+```
+
+---
+
+## 📊 What the System Produces
+
+From a simple dataset like:
 
 ```csv
 date,ndvi
@@ -110,33 +113,24 @@ date,ndvi
 2024-05-01,0.35
 ```
 
-The analysis engine can then derive values such as:
+CropCycle can derive metrics such as:
 
 ```text
-Growth Start      → detected from rising NDVI
-Peak Growth       → highest NDVI
-Harvest / Decline → sustained post-peak decrease
-Average NDVI      → seasonal mean
-Health Score      → 0–100 composite score
-Season Length     → growth-start to harvest duration
-```
-
----
-
-## 🌿 Included demo datasets
-
-The repository includes example agricultural datasets for different regions and crops.
-
-| Dataset | Crop | Location | Points |
-|---|---|---|---:|
-| `wheat_india` | Wheat | Punjab, India | 15 |
-| `rice_kerala` | Rice | Kerala, India | 13 |
-| `corn_maharashtra` | Corn | Maharashtra, India | 12 |
-
-The backend also contains a sample wheat CSV at:
-
-```text
-backend/sample_data/wheat_punjab_sample.csv
+┌──────────────────────────────────────────┐
+│             CROP ANALYSIS                 │
+├──────────────────────────────────────────┤
+│  🌱 Growth Start       2023-12-01         │
+│  📈 Peak Growth        2024-03-15         │
+│  🌾 Harvest            2024-05-01         │
+│                                          │
+│  ❤️ Crop Health        0–100 score       │
+│  📊 Average NDVI       calculated         │
+│  ⛰️  Maximum NDVI       calculated         │
+│  📉 NDVI Variance      calculated         │
+│  📅 Season Length      calculated         │
+│  🌿 Coverage           Poor/Fair/Good/    │
+│                        Excellent           │
+└──────────────────────────────────────────┘
 ```
 
 ---
@@ -144,128 +138,60 @@ backend/sample_data/wheat_punjab_sample.csv
 ## 🏗️ Architecture
 
 ```text
-┌───────────────────────────────┐
-│           Frontend            │
-│       Vite / React UI         │
-│   Charts • Data • Dashboard   │
-└───────────────┬───────────────┘
-                │ REST API
-                ▼
-┌───────────────────────────────┐
-│            Backend            │
-│        Node.js + Express      │
-│                               │
-│ Auth • Data • Analysis APIs   │
-│            │                  │
-│            ▼                  │
-│     Analysis Service          │
-│   NDVI → stages + metrics     │
-└───────────────┬───────────────┘
-                │
-                ▼
-┌───────────────────────────────┐
-│            MongoDB            │
-│ Users • Crop Data • Analysis  │
-└───────────────────────────────┘
+                    ┌───────────────────┐
+                    │    React / Vite   │
+                    │    Frontend       │
+                    └─────────┬─────────┘
+                              │
+                         REST API
+                              │
+                    ┌─────────▼─────────┐
+                    │  Node + Express   │
+                    │     Backend       │
+                    └─────┬───────┬─────┘
+                          │       │
+                  ┌───────▼─┐ ┌──▼──────────────┐
+                  │ MongoDB │ │ Analysis Engine │
+                  │         │ │      NDVI       │
+                  └─────────┘ └─────────────────┘
 ```
 
 ---
 
-## 📁 Project structure
+## 📁 Project Structure
 
 ```text
 Extraction-of-Crop-Cycle-Parameters-from-Multi-Temporal-Data/
 │
 ├── backend/
-│   ├── config/
-│   │   └── db.js
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── dataController.js
-│   │   └── analysisController.js
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── CropData.js
-│   │   └── Analysis.js
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── data.js
-│   │   └── analysis.js
-│   ├── services/
-│   │   └── analysisService.js
-│   ├── sample_data/
-│   │   └── wheat_punjab_sample.csv
+│   ├── config/             # Database configuration
+│   ├── controllers/        # Auth, data & analysis controllers
+│   ├── middleware/         # JWT authentication
+│   ├── models/             # User, crop data & analysis schemas
+│   ├── routes/             # REST API routes
+│   ├── services/           # Core crop-cycle analysis engine
+│   ├── sample_data/        # Example NDVI datasets
 │   ├── .env.example
-│   ├── package.json
 │   └── server.js
 │
 ├── frontend/
-│   ├── index.html
+│   ├── index.html          # Frontend / standalone demo
 │   ├── vite.config.js
 │   └── package.json
 │
-├── standalone/
-│   └── ... standalone demo assets
-│
+├── standalone/             # Standalone project assets
 ├── package.json
-├── README_VSCODE.md
 └── README.md
 ```
 
 ---
 
-## 🛠️ Tech stack
+## 🚀 Run Locally
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| Frontend | React / Vite | Interactive analysis interface |
-| Visualization | Recharts / Chart.js | NDVI and crop-cycle charts |
-| Maps | Leaflet | Geographic visualization support |
-| Backend | Node.js / Express | REST API and application logic |
-| Database | MongoDB / Mongoose | Users, datasets, analysis results |
-| Authentication | JWT / bcryptjs | Secure user authentication |
-| File processing | Multer / csv-parse | CSV upload and parsing |
-| Configuration | dotenv | Environment-based configuration |
-
----
-
-## 🔌 API
-
-### Authentication
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/auth/register` | Register a user |
-| `POST` | `/api/auth/login` | Login and receive JWT |
-| `GET` | `/api/auth/me` | Get the authenticated user |
-
-### Crop data
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/data/upload` | Upload a CSV dataset |
-| `POST` | `/api/data/demo` | Load demo data |
-| `GET` | `/api/data` | List user datasets |
-| `GET` | `/api/data/:id` | Get one dataset and its time series |
-| `DELETE` | `/api/data/:id` | Delete a dataset and its analysis |
-
-### Analysis
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/analysis` | List analyses for the user |
-| `GET` | `/api/analysis/:cropDataId` | Get analysis for a dataset |
-
----
-
-## 🚀 Run locally
-
-### Prerequisites
+### Requirements
 
 - **Node.js 18+**
-- **MongoDB** locally or through MongoDB Atlas
+- **MongoDB** — local instance or MongoDB Atlas
 
 ### Backend
 
@@ -275,26 +201,22 @@ npm install
 cp .env.example .env
 ```
 
-Configure the environment file:
+Configure your environment:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_secret
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 ```
 
-Start the API:
+Start the server:
 
 ```bash
 npm run dev
 ```
 
-Backend runs on:
-
-```text
-http://localhost:5000
-```
+Backend → `http://localhost:5000`
 
 ### Frontend
 
@@ -304,92 +226,127 @@ npm install
 npm run dev
 ```
 
-Frontend runs on:
+Frontend → `http://localhost:5173`
 
-```text
-http://localhost:5173
-```
+> 💡 The standalone `frontend/index.html` can also be opened directly in a browser for a backend-free demo.
 
-### Standalone demo
+---
 
-The repository also includes a standalone frontend demo. The existing `frontend/index.html` can be opened directly in a browser for a backend-independent demonstration.
+## 🔌 API
+
+### Authentication
+
+| Method | Endpoint | Purpose |
+|:---:|---|---|
+| `POST` | `/api/auth/register` | Create account |
+| `POST` | `/api/auth/login` | Login and receive JWT |
+| `GET` | `/api/auth/me` | Get authenticated user |
+
+### Crop Data
+
+| Method | Endpoint | Purpose |
+|:---:|---|---|
+| `POST` | `/api/data/upload` | Upload NDVI CSV |
+| `POST` | `/api/data/demo` | Load demo dataset |
+| `GET` | `/api/data` | List user datasets |
+| `GET` | `/api/data/:id` | Get dataset + time series |
+| `DELETE` | `/api/data/:id` | Delete dataset + analysis |
+
+### Analysis
+
+| Method | Endpoint | Purpose |
+|:---:|---|---|
+| `GET` | `/api/analysis` | List analyses |
+| `GET` | `/api/analysis/:cropDataId` | Get analysis for dataset |
+
+---
+
+## 🌿 Included Demo Datasets
+
+| Dataset | Crop | Region | Observations |
+|---|---|---|---:|
+| 🌾 `wheat_india` | Wheat | Punjab, India | 15 |
+| 🍚 `rice_kerala` | Rice | Kerala, India | 13 |
+| 🌽 `corn_maharashtra` | Corn | Maharashtra, India | 12 |
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 18 · Vite · Recharts / Chart.js |
+| **Backend** | Node.js · Express 4 |
+| **Database** | MongoDB · Mongoose |
+| **Authentication** | JWT · bcryptjs |
+| **Data ingestion** | Multer · csv-parse |
+| **Mapping** | Leaflet |
+| **Styling** | Custom CSS · CSS Variables |
+
+</div>
 
 ---
 
 ## ☁️ Deployment
 
-The current project structure is suitable for a split deployment model:
+### Frontend → Vercel
+
+```text
+1. Import the frontend project
+2. Configure VITE_API_URL
+3. Select Vite as the framework
+4. Deploy
+```
 
 ### Backend → Render
 
-1. Deploy the `backend` directory as a Web Service.
-2. Install dependencies with `npm install`.
-3. Start with `npm start`.
-4. Configure:
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `NODE_ENV=production`
-   - `FRONTEND_URL`
-
-### Frontend → Vercel
-
-1. Deploy the `frontend` directory.
-2. Set the API URL environment variable used by the frontend.
-3. Use the Vite framework configuration.
-
----
-
-## 🎯 Why this project matters
-
-Remote-sensing datasets can contain a large amount of information, but raw NDVI observations are not immediately useful to every user.
-
-CropCycle focuses on the layer in between **raw satellite-derived measurements** and **interpretable agricultural information**:
-
 ```text
-Raw NDVI observations
-          ↓
-     Signal cleanup
-          ↓
-   Biological stages
-          ↓
-     Crop metrics
-          ↓
-   Human-readable insight
+1. Create a Web Service
+2. Set MONGODB_URI
+3. Set JWT_SECRET
+4. Set FRONTEND_URL
+5. Build → npm install
+6. Start → npm start
 ```
 
-The project can serve as a foundation for future work involving richer remote-sensing inputs, crop-specific models, anomaly detection, forecasting, and decision-support systems.
+---
+
+## 🎯 Why This Project?
+
+Crop-cycle information is often hidden inside raw remote-sensing time series. CropCycle explores a practical way to make that information easier to interpret by combining **remote-sensing data, time-series analysis, backend systems, and visualisation** in one workflow.
+
+The project was built around a simple idea:
+
+> **Turn a vegetation signal into something a person can understand and act on.**
 
 ---
 
-## 🔭 Future directions
+## 🔭 Future Scope
 
-Potential next steps include:
+Potential extensions include:
 
-- 🤖 ML-based crop-stage detection instead of fixed thresholds
-- 🛰️ Direct ingestion of Sentinel-2 / Landsat time-series data
-- 🗺️ Field-level geospatial analysis
-- 🌧️ Weather and rainfall integration
-- 🚨 Crop-stress and anomaly detection
-- 📅 Yield and harvest-date forecasting
-- 🧠 Crop-specific calibration of thresholds and health metrics
-- 📡 Automated time-series updates instead of manual CSV uploads
-
----
-
-## 👨‍💻 Project
-
-Built by **Jyatin** as a research-oriented full-stack project exploring how time-series remote-sensing data can be converted into practical crop-cycle information.
-
-**Repository:** [Extraction-of-Crop-Cycle-Parameters-from-Multi-Temporal-Data](https://github.com/Jyatin/Extraction-of-Crop-Cycle-Parameters-from-Multi-Temporal-Data)
+- 🛰️ Direct satellite-data ingestion
+- 🤖 ML-based crop-stage classification
+- 🌦️ Weather-aware crop analysis
+- 🗺️ Field-level geospatial analytics
+- 📡 Near-real-time monitoring
+- 📱 Mobile-friendly agricultural dashboards
+- 📈 Historical crop-cycle comparison
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
+MIT License.
 
----
+Built as an academic and technical exploration of **crop-cycle analysis using multi-temporal vegetation data**.
 
-<p align="center">
-  <b>🌱 Turning NDVI time series into a story of the crop season.</b>
-</p>
+<div align="center">
+
+### 🌱 Built with data, code & curiosity.
+
+**[Jyatin](https://github.com/Jyatin)**
+
+</div>
