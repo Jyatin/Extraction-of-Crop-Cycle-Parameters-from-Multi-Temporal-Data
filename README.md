@@ -116,22 +116,28 @@ date,ndvi
 CropCycle can derive metrics such as:
 
 ```text
-┌──────────────────────────────────────────┐
-│             CROP ANALYSIS                 │
-├──────────────────────────────────────────┤
-│  🌱 Growth Start       2023-12-01         │
-│  📈 Peak Growth        2024-03-15         │
-│  🌾 Harvest            2024-05-01         │
-│                                          │
-│  ❤️ Crop Health        0–100 score       │
-│  📊 Average NDVI       calculated         │
-│  ⛰️  Maximum NDVI       calculated         │
-│  📉 NDVI Variance      calculated         │
-│  📅 Season Length      calculated         │
-│  🌿 Coverage           Poor/Fair/Good/    │
-│                        Excellent           │
-└──────────────────────────────────────────┘
+╭────────────────────────────────────────────────╮
+│              🌱  CROP ANALYSIS                 │
+├────────────────────────────────────────────────┤
+│                                                │
+│  🌱  GROWTH START          2023-12-01          │
+│  📈  PEAK GROWTH           2024-03-15          │
+│  🌾  HARVEST               2024-05-01          │
+│                                                │
+│  ────────────────────────────────────────────  │
+│                                                │
+│  ❤️  CROP HEALTH           0 – 100             │
+│  📊  AVERAGE NDVI          Calculated          │
+│  ⛰️  MAXIMUM NDVI          Calculated          │
+│  📉  NDVI VARIANCE         Calculated          │
+│  📅  SEASON LENGTH         Calculated          │
+│  🌿  COVERAGE              Poor / Fair /       │
+│                             Good / Excellent   │
+│                                                │
+╰────────────────────────────────────────────────╯
 ```
+
+> **Reading the panel:** the first three rows show the detected crop-cycle milestones; the lower section summarises the health and vegetation metrics calculated from the NDVI series.
 
 ---
 
